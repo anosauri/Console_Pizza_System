@@ -1,73 +1,85 @@
-# System zamawiania pizzy
+# Console Pizza Ordering System
+This application was created during the 2nd semester of Computer Science studies as a final project for the Object-Oriented Programming (OOP) course.
+It is a collaborative group project designed to practice Java and OOP principles. The application simulates a pizzeria. The system allows customers to create orders and track their status in the console.
 
-Program umożliwia zarządzanie zamówieniami w pizzerii poprzez konsolowe menu. Użytkownik może tworzyć zamówienia, wybierać gotowe pizze lub komponować własne, stosować promocje, zarządzać zamówieniami i śledzić ich status.
-## Funkcjonalność
-- **Tworzenie nowego zamówienia:**
-  - Pobieranie danych klienta (np. imię, nazwisko, kontakt)
-  - Inicjowanie pustego zamówienia powiązanego z klientem
+## My Contribution
+This project was a collaborative effort. While the base architecture and some initial methods were established by my teammate, my specific responsibilities included:
 
-- **Dodawanie pizzy do zamówienia:**
-  - Wybór gotowej pizzy z menu (każda pizza to osobna klasa dziedzicząca po abstrakcyjnej klasie `Pizza`, np. `Margherita`, `Pepperoni`, `Farmerska`, `Vegetariana`, `Serowy Kurczak`, `Serowa`)
-  - Tworzenie własnej kompozycji pizzy (wybór rozmiaru oraz składników)
+* **System Core & Console Interface (`PizzeriaSystem`):**
+  * Within the shared class structure, I implemented the **logic for the console menu**.
+  * It handles user input via the console, enabling the user to navigate the menu and trigger specific system actions (like creating an order or checking status) without errors.
 
-- **Usuwanie pizzy z zamówienia**
+* **Validation & Security:**
+  * Implemented strict data validation in `Client` class using Regular Expressions to check if the name contains only letters and if the phone number has the correct format.
+  * Added checks in `Ingredient` to prevent critical errors like negative prices or inventory counts.
+  * Implemented logic in `PizzaFactory` to verify ingredient availability in the "fridge" before processing an order.
+  * Protected `OrderManager` against invalid operations, such as modifying cancelled orders.
+  * I implemented error handling throwing `IllegalArgumentException` with custom messages for invalid inputs.
 
-- **Wybór promocji:**
-  - Brak promocji
-  - Zniżka procentowa
-  - Kup 2, trzecia gratis
-  - Darmowa dostawa
+* **Menu Implementation:**
+  * I wrote the code for specific pizzas (e.g., `Farmerska`, `Serowa`) by defining their ingredient lists in the constructors.
+  * I implemented the `displayMenu` method to print available pizzas to the console.
+  * I implemented rules for **Custom Pizza**, ensuring that a user cannot place an invalid order (e.g., a pizza without sauce).
+  * I added a simple **Inventory Management** mechanism that automatically decreases the stock of ingredients in the "fridge" after every order.
 
-- **Wyliczanie ceny zamówienia na podstawie składników, rozmiaru pizzy oraz zastosowanej promocji**
+## Functionality
+* **Create New Order:**
+  * Collecting client data (Name, Surname, Contact info).
+  * Initializing an empty cart associated with the client.
+* **Add Pizza to Order:**
+  * Selection from pre-defined menu (each pizza is a separate class inheriting from the abstract `Pizza` class, e.g., `Margherita`, `Pepperoni`, `Farmerska`, `Vegetariana`, `SerowyKurczak`, `Serowa`).
+  * **Custom Pizza Builder:** Allows users to compose their own pizza (selecting size and ingredients).
+* **Remove Pizza from Order**
+* **Promotion Selection:**
+  * No promotion
+  * Percentage discount
+  * "Buy 2, Get 1 Free"
+  * Free delivery
+* **Price Calculation:** Dynamic calculation based on ingredients, pizza size, and applied promotion.
+* **Order Status Management:**
+  * `ORDERING` – In progress
+  * `ORDER_PLACED` – Placed
+  * `IN_PREPARATION` – In preparation
+  * `READY` – Ready for pickup
+  * `CANCELLED` – Cancelled
+* **Automatic Status Updates:** Simulation of preparation stages over time.
+* **Order Cancellation:** Ability to cancel the order before preparation starts.
+* **Order Tracking:** Check order status by ID.
+* **Queue View:** Display all active orders.
 
-- **Zarządzanie statusami zamówienia:**
-  - `ORDERING` – w trakcie składania
-  - `ORDER_PLACED` – złożone
-  - `IN_PREPARATION` – w przygotowaniu
-  - `READY` – gotowe
-  - `CANCELLED` – anulowane
+## Project Structure
 
-- **Automatyczna zmiana statusów zamówienia w czasie** (symulacja kolejnych etapów przygotowania)
+* **`PizzeriaSystem.java`** – Main application interface containing the menu loop and user interaction handling.
+* **`OrderManager.java`** – Logic for order management: creation, processing, and status updates.
+* **`Order.java`** – Represents a single order entity (Client data, selected pizzas, promotion).
+* **`Pizza.java`** – Abstract class defining common features of all pizzas.
+  * **`CustomPizza.java`** – Represents a pizza manually composed by the user.
+  * **`Margherita.java`**, **`Pepperoni.java`**, etc. – Concrete pizza variants created based on `Pizza.java`.
+* **`PizzaFactory.java`** – Factory responsible for creating pizza instances (both pre-defined and custom) and managing ingredient inventory.
+* **`Ingredient.java`** – Represents a single pizza ingredient, mainly used in `CustomPizza`.
+* **`TypeOfIngredients.java`** – Enum defining ingredient types (e.g., Cheese, Meat, Vegetable).
+* **`Client.java`** – Stores data of the client placing the order.
+* **`PromotionType.java`** – Enum containing available promotion types.
+* **`Size.java`** – Enum defining pizza sizes.
+* **`OrderStatus.java`** – Enum describing possible order statuses.
+* **`Main.java`** – Application entry point, initializes `PizzeriaSystem`.
 
-- **Możliwość anulowania zamówienia przed jego przygotowaniem**
+## How to Run
 
-- **Podgląd statusu zamówienia po numerze**
+1.  Download the source code or clone the repository.
+2.  Open the folder containing `.java` files in your IDE (e.g., IntelliJ IDEA).
+3.  Compile all files.
+4.  Run the `Main.java` class.
+5.  Use the numbered options displayed in the console menu.
 
-- **Wyświetlanie kolejki wszystkich zamówień**
+## Requirements
 
-## Struktura projektu
+* Java 8 or higher
+* Console/Terminal for text input
 
-- **`PizzeriaSystem.java`** – główny interfejs aplikacji, zawierający pętlę menu oraz obsługę interakcji z użytkownikiem
-- **`OrderManager.java`** – logika zarządzania zamówieniami: tworzenie, przetwarzanie, aktualizacja statusów
-- **`Order.java`** – reprezentacja pojedynczego zamówienia, zawiera m.in. dane klienta, wybraną pizzę i promocję
-- **`Pizza.java`** – klasa abstrakcyjna definiująca wspólne cechy wszystkich pizz
-  - **`CustomPizza.java`** – reprezentuje pizzę tworzoną samodzielnie przez użytkownika
-  - **`Margherita.java`**, **`Pepperoni.java`**, **`Farmerska.java`**, **`Serowa.java`**, **`SerowyKurczak.java`**, **`Vegetariana.java`** – konkretne warianty pizz, tworzone na podstawie `Pizza.java`
-- **`PizzaFactory.java`** – fabryka odpowiedzialna za tworzenie instancji pizz, zarówno gotowych, jak i niestandardowych oraz magazyn składników
-- **`Ingredient.java`** – reprezentuje pojedynczy składnik pizzy, wykorzystywany głównie przy tworzeniu `CustomPizza`
-- **`TypeOfIngredients.java`** – enum określający typ składnika (np. ser, mięso, warzywo)
-- **`Client.java`** – przechowuje dane klienta składającego zamówienie
-- **`PromotionType.java`** – enum zawierający dostępne typy promocji w systemie
-- **`Size.java`** – enum definiujący rozmiary pizzy
-- **`OrderStatus.java`** – enum opisujący możliwe statusy zamówienia
-- **`Main.java`** – punkt startowy aplikacji, może zawierać uruchomienie `PizzeriaSystem`
-- **`README.md`** – dokumentacja projektu z opisem działania i struktury kodu
+## Additional Information
 
-## Uruchomienie
+The system uses a simple time simulator to automatically update order statuses after placement. Promotions apply based on specific conditions (e.g., 3 pizzas are required for "2+1 Free"). When creating a custom pizza, at least two ingredients are required (one sauce + one other), and the maximum limit is 7 ingredients.
 
-1. Pobierz i rozpakuj projekt z pliku `system_zamawiania_pizzy_Dec_Pienkowska.zip`.
-2. Otwórz folder, w którym znajdują się pliki `.java`.
-3. Skompiluj wszystkie pliki:
-  - Jeśli używasz terminala, skorzystaj z odpowiednich komend kompilacji.
-  - Jeśli wolisz IDE, kliknij prawym przyciskiem myszy na folderze i wybierz opcję kompilacji.
-4. Uruchom klasę `Main.java`.
-5. Korzystaj z numerowanych opcji wyświetlanych w menu.
-
-## Wymagania
-
-- Java 8 lub nowsza
-- Konsola do obsługi wejścia tekstowego
-
-## Informacje dodatkowe
-
-System wykorzystuje prosty symulator czasu, aby aktualizować statusy zamówień automatycznie po złożeniu. Promocje działają zależnie od warunków (np. 3 pizze wymagane do "2+1 gratis"). Przy tworzeniu własnej pizzy wymagane są przynajmniej dwa składniki - jakiś sos oraz jeden dowolny, a maksymalna ilość to 7.
+## Note on Language
+The user interface (CLI), error messages are in **Polish**, as this project was originally developed to meet specific coursework requirements at a Polish university.
